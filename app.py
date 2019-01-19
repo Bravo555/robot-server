@@ -15,5 +15,8 @@ while True:
     data, addr = sock.recvfrom(2)  # blocking
     pin, state = data
     print('received: ')
-    print(data, state)
-    leds[pin].toggle()
+    print(data)
+    if state == 0x0:
+        leds[pin].off()
+    else:
+        leds[pin].on()
