@@ -1,23 +1,13 @@
-from flask import Flask, json, make_response
-from gpiozero import LED
-app = Flask(__name__)
+from socket import *
 
-led_pins = [2, 3, 4]
+PORT = 12345  # arbitrary, just make it match in Android code
+IP = "0.0.0.0"  # represents any IP address
 
-pins = [LED(i) for i in led_pins]
+sock = socket(AF_INET, SOCK_DGRAM)  # SOCK_DGRAM means UDP socket
+sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)  # make socket reuseable
+sock.bind((IP, PORT))
 
-
-@app.route('/')
-def hello():
-    return 'Hello world!'
-
-
-@app.route('/pins/<int:pin>/toggle')
-def toggle(pin):
-    if 0 <= pin <= len(pins):
-        response = json.jsonify(pin=pin, status='success')
-        pins[pin].toggle()
-    else:
-        response = make_response(json.jsonify(
-            pin=pin, status='error', error='Pin {} is not supported! Use pins 1-8.'.format(pin)), 404)
-    return response
+while True:
+    print("Waiting for data...")
+    data, addr = sock.recvfrom(1024)  # blocking
+print ("received: " + data)
