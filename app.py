@@ -10,4 +10,4 @@ sock.bind((IP, PORT))
 while True:
     print("Waiting for data...")
     data, addr = sock.recvfrom(1024)  # blocking
-print ("received: " + data)
+    print ("received: " + data)
