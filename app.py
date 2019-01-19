@@ -14,7 +14,7 @@ def hello():
 
 @app.route('/pins/<int:pin>/toggle')
 def toggle(pin):
-    if 0 < pin <= len(pins):
+    if 0 <= pin <= len(pins):
         response = json.jsonify(pin=pin, status='success')
         pins[pin].toggle()
     else:
