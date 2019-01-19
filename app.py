@@ -4,7 +4,7 @@ from gpiozero import LED
 PORT = 12345  # arbitrary, just make it match in Android code
 IP = "0.0.0.0"  # represents any IP address
 
-led_pins = [2, 3, 4]
+led_pins = [2, 17, 10]
 leds = [LED(i) for i in led_pins]
 
 sock = socket(AF_INET, SOCK_DGRAM)  # SOCK_DGRAM means UDP socket
