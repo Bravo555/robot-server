@@ -8,7 +8,7 @@ IP = "0.0.0.0"  # represents any IP address
 led_pins = [2, 17, 10]
 leds = [LED(i) for i in led_pins]
 servo = PCA9685(0x40, debug=False)
-servo.setPWMFreq(50)
+servo.setPWMFreq(125)
 
 sock = socket(AF_INET, SOCK_DGRAM)  # SOCK_DGRAM means UDP socket
 sock.bind((IP, PORT))
@@ -27,4 +27,5 @@ while True:
         else:
             leds[address].on()
     elif address == 0xff:
-        pass
+        time = (state + 127) * 0.976 + 250
+        servo.setPWM(0, 0, time)
