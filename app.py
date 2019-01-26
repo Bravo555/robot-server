@@ -13,19 +13,20 @@ servo.setPWMFreq(125)
 sock = socket(AF_INET, SOCK_DGRAM)  # SOCK_DGRAM means UDP socket
 sock.bind((IP, PORT))
 
-while True:
-    print("Waiting for data...")
-    data, addr = sock.recvfrom(2)  # blocking
-    address, state = data
+if __name__ == '__main__':
+    while True:
+        print("Waiting for data...")
+        data, addr = sock.recvfrom(2)  # blocking
+        address, state = data
 
-    print('received: ')
-    print(data)
-    # address: 1-3 LEDs, 255 is servo
-    if address in range(0x0, 0x02):
-        if state == 0x0:
-            leds[address].off()
-        else:
-            leds[address].on()
-    elif address == 0xff:
-        time = int((state + 127) * 0.976 + 250)
-        servo.setPWM(0, 0, time)
+        print('received: ')
+        print(data)
+        # address: 1-3 LEDs, 255 is servo
+        if address in range(0x0, 0x02):
+            if state == 0x0:
+                leds[address].off()
+            else:
+                leds[address].on()
+        elif address == 0xff:
+            time = int((state + 127) * 0.976 + 250)
+            servo.setPWM(0, 0, time)
