@@ -28,5 +28,5 @@ if __name__ == '__main__':
             else:
                 leds[address].on()
         elif address == 0xff:
-            time = int((state + 127) * 0.976 + 250)
-            servo.setPWM(0, 0, time)
+            time = int(1001 + 3.921 * state)
+            servo.setServoPulse(0, time)
