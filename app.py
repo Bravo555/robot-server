@@ -27,5 +27,5 @@ while True:
         else:
             leds[address].on()
     elif address == 0xff:
-        time = (state + 127) * 0.976 + 250
+        time = int((state + 127) * 0.976 + 250)
         servo.setPWM(0, 0, time)
