@@ -22,7 +22,7 @@ if __name__ == '__main__':
         print('received: ')
         print(data)
         # address: 1-3 LEDs, 255 is servo
-        if address in range(0x0, 0x02):
+        if address in range(0x0, 0x03):
             if state == 0x0:
                 leds[address].off()
             else:
