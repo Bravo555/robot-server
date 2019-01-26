@@ -5,7 +5,7 @@ from PCA9685 import PCA9685
 PORT = 12345  # arbitrary, just make it match in Android code
 IP = "0.0.0.0"  # represents any IP address
 
-led_pins = [2, 17, 10]
+led_pins = [17, 27, 22]
 leds = [LED(i) for i in led_pins]
 servo = PCA9685(0x40, debug=False)
 servo.setPWMFreq(125)
