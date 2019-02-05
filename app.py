@@ -1,23 +1,32 @@
-from flask import Flask, json, make_response
+from socket import socket, AF_INET, SOCK_DGRAM
 from gpiozero import LED
-app = Flask(__name__)
+from PCA9685 import PCA9685
 
-led_pins = [2, 3, 4]
+PORT = 12345  # arbitrary, just make it match in Android code
+IP = "0.0.0.0"  # represents any IP address
 
-pins = [LED(i) for i in led_pins]
+led_pins = [17, 27, 22]
+leds = [LED(i) for i in led_pins]
+servo = PCA9685(0x40, debug=False)
+servo.setPWMFreq(125)
 
+sock = socket(AF_INET, SOCK_DGRAM)  # SOCK_DGRAM means UDP socket
+sock.bind((IP, PORT))
 
-@app.route('/')
-def hello():
-    return 'Hello world!'
+if __name__ == '__main__':
+    while True:
+        print("Waiting for data...")
+        data, addr = sock.recvfrom(2)  # blocking
+        address, state = data
 
-
-@app.route('/pins/<int:pin>/toggle')
-def toggle(pin):
-    if 0 < pin <= len(pins):
-        response = json.jsonify(pin=pin, status='success')
-        pins[pin].toggle()
-    else:
-        response = make_response(json.jsonify(
-            pin=pin, status='error', error='Pin {} is not supported! Use pins 1-8.'.format(pin)), 404)
-    return response
+        print('received: ')
+        print(data)
+        # address: 1-3 LEDs, 255 is servo
+        if address in range(0x0, 0x03):
+            if state == 0x0:
+                leds[address].off()
+            else:
+                leds[address].on()
+        elif address == 0xff:
+            time = int(1001 + 3.921 * state)
+            servo.setServoPulse(0, time)
