@@ -1,6 +1,9 @@
+#!/usr/bin/python3
+
 from socket import socket, AF_INET, SOCK_DGRAM
 from gpiozero import LED
 from PCA9685 import PCA9685
+import sys
 
 PORT = 12345  # arbitrary, just make it match in Android code
 IP = "0.0.0.0"  # represents any IP address
@@ -14,6 +17,21 @@ sock = socket(AF_INET, SOCK_DGRAM)  # SOCK_DGRAM means UDP socket
 sock.bind((IP, PORT))
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Using default port:', PORT)
+    elif len(sys.argv) == 2:
+        try:
+            PORT = int(sys.argv[1])
+            print('Using specified port:', PORT)
+        except ValueError:
+            print('Wrong port (0-65535)!')
+            print('Usage: ./app.py [port=12345]')
+            sys.exit(1)
+    else:
+        print('Wrong arguments!')
+        print('Usage: ./app.py [port=12345]')
+        sys.exit(1)
+
     while True:
         print("Waiting for data...")
         data, addr = sock.recvfrom(2)  # blocking
