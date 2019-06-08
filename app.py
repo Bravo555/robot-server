@@ -38,7 +38,7 @@ if __name__ == '__main__':
         address, state = data
 
         print('received: ')
-        print(data)
+        print(data.hex())
         # address: 1-3 LEDs, 255-240 is servo
         if address in range(0x0, 0x03):
             if state == 0x0:
