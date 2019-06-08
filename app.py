@@ -39,12 +39,13 @@ if __name__ == '__main__':
 
         print('received: ')
         print(data)
-        # address: 1-3 LEDs, 255 is servo
+        # address: 1-3 LEDs, 255-240 is servo
         if address in range(0x0, 0x03):
             if state == 0x0:
                 leds[address].off()
             else:
                 leds[address].on()
-        elif address == 0xff:
+        elif address in range(0xf0, 0xff + 1):
+            channel = 0xff - address
             time = int(1001 + 3.921 * state)
-            servo.setServoPulse(0, time)
+            servo.setServoPulse(channel, time)
